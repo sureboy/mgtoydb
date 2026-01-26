@@ -31,6 +31,14 @@
 		{
 		"pattern": "*.solidjscad.cn/db/*",
 		"zone_name": "solidjscad.cn"
+		},
+		{
+			"pattern": "db.solidjscad.com/*",
+			"zone_name": "solidjscad.com"
+		},
+		{
+			"pattern": "db.solidjscad.cn/*",
+			"zone_name": "solidjscad.cn"
 		}
 	]
 	/**
