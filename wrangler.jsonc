@@ -22,7 +22,17 @@
 		"binding": "KV",
 		"id": "3aea256e2c5c477a8e0318224ce35e3f"
 		}
-  	]
+  	],
+	"routes": [
+		{
+		"pattern": "*.solidjscad.com/db/*",
+		"zone_name": "solidjscad.com"
+		},
+		{
+		"pattern": "*.solidjscad.cn/db/*",
+		"zone_name": "solidjscad.cn"
+		}
+	]
 	/**
 	 * Smart Placement
 	 * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
