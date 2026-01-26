@@ -25,14 +25,6 @@
   	],
 	"routes": [
 		{
-		"pattern": "*.solidjscad.com/db/*",
-		"zone_name": "solidjscad.com"
-		},
-		{
-		"pattern": "*.solidjscad.cn/db/*",
-		"zone_name": "solidjscad.cn"
-		},
-		{
 			"pattern": "db.solidjscad.com/*",
 			"zone_name": "solidjscad.com"
 		},
