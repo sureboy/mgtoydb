@@ -10,8 +10,12 @@
 	"compatibility_flags": [
 		"nodejs_als"
 	],
-	"vars": {
-		"API_SECRET_KEY":"abcdefghijklmnopqrstuvwxyz"
+	"env": {
+		"production": {
+			"vars": {
+				"API_SECRET_KEY":"abcdefghijklmnopqrstuvwxyz"
+			}
+		}
 	},
 	"assets": {
 		"binding": "ASSETS",
