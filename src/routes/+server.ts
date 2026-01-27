@@ -1,7 +1,11 @@
 import { error,json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-
-const tmpCode = new Map<string,string>()
+import { API_SECRET_KEY } from '$env/static/private';
+import * as crypto  from 'crypto';
+function sha256(data:string) {
+  return crypto.createHash('sha256').update(data).digest('hex');
+}
+ 
 function generateRandomString(length: number): string {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = '';
@@ -21,15 +25,10 @@ export const POST:RequestHandler=async (e) => {
 };
 export const GET: RequestHandler =async ({url, request, platform }) => {
     ///await platform?.env.KV.put("test","1231")
-    const k = url.searchParams.get("k")
-    if (k){
-        let code = tmpCode.get(k)
-        if (code){
-            return json({code})
-        }
-        code = generateRandomString(8) 
-        tmpCode.set(k,code)
-        return json({code}) 
+    const code = url.searchParams.get("code")
+    const key = url.searchParams.get("key")
+    if (code){
+      return json({ key:sha256(API_SECRET_KEY+code + parseInt((Date.now()/100000).toString()))}) 
     }
     error(404)
 };
