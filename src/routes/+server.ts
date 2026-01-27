@@ -43,7 +43,8 @@ export const GET: RequestHandler =async ({url, request, platform }) => {
     const code = url.searchParams.get("code")
     const key = url.searchParams.get("key")
     if (code){
-      return json({ key:await sha256(env.API_SECRET_KEY+code + parseInt((Date.now()/100000).toString()))}) 
+      const t = parseInt((Date.now()/100000).toString())
+      return json({key,apik:env.API_SECRET_KEY,t, newkey:await sha256(env.API_SECRET_KEY+code + t)}) 
     }
     error(404)
 };
