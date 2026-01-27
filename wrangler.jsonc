@@ -9,13 +9,9 @@
 	"compatibility_date": "2025-09-27",
 	"compatibility_flags": [
 		"nodejs_als"
-	],
-	"env": {
-		"production": {
-			"vars": {
-				"API_SECRET_KEY":"abcdefghijklmnopqrstuvwxyz"
-			}
-		}
+	], 
+	"vars": {
+		"API_SECRET_KEY":"abcdefghijklmnopqrstuvwxyz"			 
 	},
 	"assets": {
 		"binding": "ASSETS",

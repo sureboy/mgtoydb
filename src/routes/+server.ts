@@ -1,6 +1,7 @@
 import { error,json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { API_SECRET_KEY } from '$env/static/private';
+//import { API_SECRET_KEY } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import * as crypto  from 'crypto';
 function sha256(data:string) {
   return crypto.createHash('sha256').update(data).digest('hex');
@@ -28,7 +29,7 @@ export const GET: RequestHandler =async ({url, request, platform }) => {
     const code = url.searchParams.get("code")
     const key = url.searchParams.get("key")
     if (code){
-      return json({ key:sha256(API_SECRET_KEY+code + parseInt((Date.now()/100000).toString()))}) 
+      return json({ key:sha256(env.API_SECRET_KEY+code + parseInt((Date.now()/100000).toString()))}) 
     }
     error(404)
 };
