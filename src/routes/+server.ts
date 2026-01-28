@@ -3,9 +3,15 @@ import type { RequestHandler } from './$types';
 //import { API_SECRET_KEY } from '$env/static/private';
 import { env } from '$env/dynamic/private';
 //import * as crypto  from 'crypto';
-async function sha256(message:string) {
+async function sha256(message:string|Uint8Array<ArrayBuffer>) {
   // 1. 将字符串编码为 Uint8Array (UTF-8)
-  const msgBuffer = new TextEncoder().encode(message);
+  let msgBuffer
+  if ( typeof message === "string"){
+    msgBuffer = new TextEncoder().encode(message);
+  }else{
+    msgBuffer = message
+  }
+  
   
   // 2. 使用 Web Crypto API 计算哈希
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
@@ -22,7 +28,7 @@ async function sha256(message:string) {
 //}
  
 function generateRandomString(length: number): string {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
   let result = '';
   
   for (let i = 0; i < length; i++) {
@@ -33,18 +39,34 @@ function generateRandomString(length: number): string {
   return result;
 }
 export const POST:RequestHandler=async (e) => {
-    console.log(e)
-    await e.platform?.env.KV.put("test","1231")
-    return json({msg:"true"}) 
+  
+    //console.log(e)
+    const code = e.url.searchParams.get("code")
+    const key = e.url.searchParams.get("key")
+    //const {code,key,db} = (await e.request.json()) as {code?:string,key?:string,db?:{k:string,v:string}}
+    if (!code 
+      || !key       
+      || key != await sha256(env.API_SECRET_KEY+code.toLocaleLowerCase() + Date.now().toString().slice(0,8))){ 
+      return json({msg :"err"}) 
+    }
+    const arrayBuffer = await e.request.arrayBuffer();
+    if (!arrayBuffer)
+      return json({msg :"not db"}) 
+    //return json({msg:"ok"})
+    const k =await  sha256(new Uint8Array(arrayBuffer))
+    await e.platform?.env.KV.put(k,arrayBuffer,{})
+    return json({msg:"ok",k}) 
 
 };
 export const GET: RequestHandler =async ({url, request, platform }) => {
     ///await platform?.env.KV.put("test","1231")
     const code = url.searchParams.get("code")
-    const key = url.searchParams.get("key")
-    if (code){
-      const t =Date.now().toString().slice(0,8)// parseInt((Date.now()/100000).toString())
-      return json({key,apik:env.API_SECRET_KEY,t, newkey:await sha256(env.API_SECRET_KEY+code + t)}) 
+    const key = url.searchParams.get("key") 
+    if (!code 
+      || !key 
+      || key != await sha256(env.API_SECRET_KEY+code.toLocaleLowerCase() + Date.now().toString().slice(0,8))){ 
+      return json({msg :"err"}) 
     }
-    error(404)
+    return json({msg:"ok"})
+    
 };
