@@ -3,6 +3,28 @@ import type { RequestHandler } from './$types';
 //import { API_SECRET_KEY } from '$env/static/private';
 import { env } from '$env/dynamic/private';
 //import * as crypto  from 'crypto';
+const base64url = {
+  baseTime:1767196800000,
+  chars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_',
+  getStr:function(){
+    return this.encode(Date.now() - this.baseTime);
+  },
+  encode: function(num:number) {
+    let str = '';
+    while (num > 0) {
+      str = this.chars[num % 64] + str;
+      num = Math.floor(num / 64);
+    }
+    return str;
+  },
+  decode: function(str:string) {
+    let num = 0;
+    for (let i = 0; i < str.length; i++) {
+      num = num * 64 + this.chars.indexOf(str[i]);
+    }
+    return num;
+  }
+};
 async function sha256(message:string|Uint8Array<ArrayBuffer>) {
   // 1. 将字符串编码为 Uint8Array (UTF-8)
   let msgBuffer
@@ -53,7 +75,7 @@ export const POST:RequestHandler=async (e) => {
     if (!arrayBuffer)
       return json({msg :"not db"}) 
     //return json({msg:"ok"})
-    const k =await  sha256(new Uint8Array(arrayBuffer))
+    const k =base64url.getStr() //await  sha256(new Uint8Array(arrayBuffer))
     await e.platform?.env.KV.put(k,arrayBuffer,{})
     return json({msg:"ok",k}) 
 
