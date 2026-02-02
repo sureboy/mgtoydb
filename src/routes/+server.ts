@@ -75,7 +75,7 @@ export const POST:RequestHandler=async (e) => {
     if (!arrayBuffer)
       return json({msg :"not db"}) 
     //return json({msg:"ok"})
-    const k =base64url.getStr() //await  sha256(new Uint8Array(arrayBuffer))
+    const k = Math.floor(Date.now()/1000).toString(32)// base64url.getStr() //await  sha256(new Uint8Array(arrayBuffer))
     await e.platform?.env.KV.put(k,arrayBuffer,{})
     return json({msg:"ok",k}) 
 
