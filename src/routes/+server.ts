@@ -34,7 +34,20 @@ export const POST:RequestHandler=async (e) => {
       return json({msg :"not db"}) 
     //return json({msg:"ok"})
     const k = Date.now().toString(32)
-    await e.platform?.env.KV.put(k,arrayBuffer,{})
+    const opt:{metadata?:any,expiration?:number,expirationTtl?:number} = { }
+    const metadata =  e.url.searchParams.get("metadata")
+    if (metadata){
+      opt.metadata = JSON.parse(metadata)
+    }
+    const expiration =  e.url.searchParams.get("expiration")
+    if (expiration){
+      opt.expiration =parseInt(expiration)
+    }
+    const expirationTtl =  e.url.searchParams.get("expirationttl")
+    if (expirationTtl){
+      opt.expirationTtl =parseInt(expirationTtl)
+    } 
+    await e.platform?.env.KV.put(k,arrayBuffer,opt)
     return json({msg:"ok",k})
 };
 export const GET: RequestHandler =async ({url, request, platform }) => {
@@ -53,6 +66,11 @@ export const GET: RequestHandler =async ({url, request, platform }) => {
         });
         //return value
       }
+    }else if(url.searchParams.get("list")){
+      const value = await platform?.env.KV.list({cursor:url.searchParams.get("cursor")||""})
+      if (value){
+        return json(value)
+      }        
     }
     error(404)    
 };
