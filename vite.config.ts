@@ -5,8 +5,5 @@ export default defineConfig({
 	plugins: [
 		sveltekit(),
 		cloudflareDoExporter({ durableObjects: ['src/lib/durable-objects.ts'] })
-	],
-	ssr: { 
-        external: ['cloudflare:workers']
-    }
+	]
 });

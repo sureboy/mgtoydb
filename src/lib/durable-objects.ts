@@ -1,3 +1,4 @@
+/*
 import { DurableObject } from "cloudflare:workers";
 
 //export interface Env {
@@ -11,4 +12,4 @@ export class MyDurableObject extends DurableObject {
   async sayHello(): Promise<string> {
     return "Hello, World!";
   }
-} 
+} */
