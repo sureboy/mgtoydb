@@ -14,22 +14,6 @@
 		"binding": "ASSETS",
 		"directory": ".svelte-kit/cloudflare"
 	},
-	"durable_objects": {
-		"bindings": [
-		{
-			"name": "MY_DURABLE_OBJECT",
-			"class_name": "MyDurableObject"
-		}
-		]
-	},
-	"migrations": [
-		{
-			"tag": "v1",
-			"new_sqlite_classes": [
-				"MyDurableObject"
-			]
-		}
-	],
 	"observability": {
 		"enabled": true
 	},
