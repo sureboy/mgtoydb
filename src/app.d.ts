@@ -6,6 +6,7 @@ declare global {
         interface Platform {
             env: {
                 KV: KVNamespace;
+                MY_DURABLE_OBJECT:DurableObjectNamespace
             }
             cf: CfProperties
             ctx: ExecutionContext
